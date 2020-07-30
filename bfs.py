@@ -21,17 +21,19 @@ def bfs_find_path(draw, grid, start, end):
                 pygame.quit()
 
         n = Q.qsize()
-        for i in range(n):
+        while n:
+            n = n-1
             current = Q.get()
-            if current == end:
-                construct_path(parent, end, draw)
-                return True
             open_set_hash.add(current)
             for neighbor in current.neighbors:
                 if neighbor not in open_set_hash:
                     Q.put(neighbor)
                     parent[neighbor] = current
+                    if neighbor == end:
+                        construct_path(parent, end, draw)
+                        return True
                     neighbor.make_open()
             if(current != start):
                 current.make_closed()
         draw()
+    return False
