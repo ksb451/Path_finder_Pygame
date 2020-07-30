@@ -2,6 +2,7 @@ import pygame
 import math
 from base import *
 from Astar import *
+from bfs import *
 
 WIDTH = 600
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
@@ -20,7 +21,7 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-    ROWS = 50
+    ROWS = 30
     grid = make_grid(ROWS, width)
 
     start = None
@@ -33,8 +34,6 @@ def main(win, width):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if started:
-                continue
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_pos(pos, ROWS, WIDTH)
@@ -57,15 +56,23 @@ def main(win, width):
                 if spot == end:
                     end = None
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not started and start and end:
-                    #started = True
+                if event.key == pygame.K_a and start and end and not started:
+                    started = True
                     for row in grid:
                         for spot in row:
                             spot.update_neighbors(grid)
 
                     algorithm(lambda: draw(win, grid, ROWS, width),
                               grid, start, end)
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_b and start and end and not started:
+                    started = True
+                    for row in grid:
+                        for spot in row:
+                            spot.update_neighbors(grid)
+                    bfs_find_path(lambda: draw(
+                        win, grid, ROWS, width), grid, start, end)
+                if event.key == pygame.K_r:
+                    started = False
                     start = None
                     end = None
                     grid = make_grid(ROWS, width)
