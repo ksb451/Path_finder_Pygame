@@ -1,6 +1,8 @@
 import queue
 import pygame
 from base import *
+import time
+from collections import deque
 
 
 def construct_path(parent, current, draw):
@@ -11,23 +13,29 @@ def construct_path(parent, current, draw):
 
 
 def bfs_find_path(draw, grid, start, end):
-    Q = queue.Queue(0)
-    Q.put(start)
+    #begin = time.time()
+    Q = deque()
+    Q.append(start)
+    #Q = queue.Queue(0)
+    # Q.put(start)
     open_set_hash = set()
     parent = {}
-    while not Q.empty():
+    while Q:
+        print(len(Q))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-
-        n = Q.qsize()
+        n = len(Q)
         while n:
             n = n-1
-            current = Q.get()
-            open_set_hash.add(current)
+            current = Q.popleft()
+            if current not in open_set_hash:
+                open_set_hash.add(current)
+            # print(len(current.neighbors))
             for neighbor in current.neighbors:
                 if neighbor not in open_set_hash:
-                    Q.put(neighbor)
+                    Q.append(neighbor)
+                    open_set_hash.add(neighbor)
                     parent[neighbor] = current
                     if neighbor == end:
                         construct_path(parent, end, draw)
@@ -36,4 +44,8 @@ def bfs_find_path(draw, grid, start, end):
             if(current != start):
                 current.make_closed()
         draw()
+        begin = time.time()
+        while True:
+            if time.time()-begin > .2:
+                break
     return False
