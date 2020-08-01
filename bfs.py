@@ -5,11 +5,14 @@ import time
 from collections import deque
 
 
+# construct the path by using the parent array
 def construct_path(parent, current, draw):
     while current in parent:
         current = parent[current]
         current.make_path()
         draw()
+
+# BFS algorithm
 
 
 def bfs_find_path(draw, grid, start, end):
@@ -25,7 +28,7 @@ def bfs_find_path(draw, grid, start, end):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-        n = len(Q)
+        n = len(Q)  # to visualize the algorithm layer by layer
         while n:
             n = n-1
             current = Q.popleft()
@@ -37,15 +40,12 @@ def bfs_find_path(draw, grid, start, end):
                     Q.append(neighbor)
                     open_set_hash.add(neighbor)
                     parent[neighbor] = current
-                    if neighbor == end:
+                    if neighbor == end:  # if end Node is found
                         construct_path(parent, end, draw)
                         return True
                     neighbor.make_open()
             if(current != start):
                 current.make_closed()
-        draw()
-        begin = time.time()
-        while True:
-            if time.time()-begin > .2:
-                break
+        draw()  # after visiting celss in each lvl
+        time.sleep(.15)
     return False

@@ -1,3 +1,5 @@
+# base class for cell in the grid
+
 import pygame
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
@@ -64,6 +66,7 @@ class Spot:
     def draw(self, win):
         pygame.draw.rect(
             win, self.color, (self.x, self.y, self.width, self.width))
+    # to keep track of neighbors of each cell by taavelling in 4 direction
 
     def update_neighbors(self, grid):
         self.neighbors = []
@@ -75,9 +78,12 @@ class Spot:
             self.neighbors.append(grid[self.row][self.col+1])
         if self.col > 0 and not grid[self.row][self.col-1].is_barrier():
             self.neighbors.append(grid[self.row][self.col-1])
+    # To compare two cells
 
     def __lt__(self, other):
         return False
+
+# function to draw the grid onto the screen
 
 
 def draw_grid(win, rows, width):
@@ -86,6 +92,8 @@ def draw_grid(win, rows, width):
         pygame.draw.line(win, GREY, (0, i*gap), (width, i*gap))
         for j in range(rows):
             pygame.draw.line(win, GREY, (j*gap, 0), (j*gap, width))
+
+# function to make the grid
 
 
 def make_grid(rows, width):
@@ -97,6 +105,8 @@ def make_grid(rows, width):
             cube = Spot(i, j, gap, rows)
             grid[i].append(cube)
     return grid
+
+# main draw function to draw everything on the screen
 
 
 def draw(win, grid, rows, width):

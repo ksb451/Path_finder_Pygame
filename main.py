@@ -4,11 +4,12 @@ from base import *
 from Astar import *
 from bfs import *
 
-WIDTH = 600
+WIDTH = 600  # Width of the Application Screen
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
-pygame.display.set_caption("A* Path Finding Algorithm")
+pygame.display.set_caption("Path Finding Visuaizer")
 
 
+# return the cell clicked by using width of screen and cordinates and no of ros
 def get_clicked_pos(pos, rows, width):
     gap = width//rows
     y, x = pos
@@ -17,11 +18,11 @@ def get_clicked_pos(pos, rows, width):
     col = x//gap
     return row, col
 
-# def algorithm_2
+# main application loop
 
 
 def main(win, width):
-    ROWS = 50
+    ROWS = 50  # size of grid
     grid = make_grid(ROWS, width)
 
     start = None
@@ -34,8 +35,9 @@ def main(win, width):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if pygame.mouse.get_pressed()[0]:
-                pos = pygame.mouse.get_pos()
+            if pygame.mouse.get_pressed()[0]:  # left-click
+                pos = pygame.mouse.get_pos()  # returns a tuplewith x and y cordinate of screen
+                # get the row and column index
                 row, col = get_clicked_pos(pos, ROWS, WIDTH)
                 spot = grid[row][col]
                 if not start:
@@ -46,7 +48,7 @@ def main(win, width):
                     end.make_end()
                 elif spot != end and spot != start:
                     spot.make_barrier()
-            elif pygame.mouse.get_pressed()[2]:
+            elif pygame.mouse.get_pressed()[2]:  # right-click
                 pos = pygame.mouse.get_pos()
                 row, col = get_clicked_pos(pos, ROWS, width)
                 spot = grid[row][col]
@@ -56,7 +58,7 @@ def main(win, width):
                 if spot == end:
                     end = None
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a and start and end and not started:
+                if event.key == pygame.K_a and start and end and not started:  # A*
                     started = True
                     for row in grid:
                         for spot in row:
@@ -64,14 +66,14 @@ def main(win, width):
 
                     algorithm(lambda: draw(win, grid, ROWS, width),
                               grid, start, end)
-                if event.key == pygame.K_b and start and end and not started:
+                if event.key == pygame.K_b and start and end and not started:  # BFS
                     started = True
                     for row in grid:
                         for spot in row:
                             spot.update_neighbors(grid)
                     bfs_find_path(lambda: draw(
                         win, grid, ROWS, width), grid, start, end)
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_r:  # reset
                     started = False
                     start = None
                     end = None
