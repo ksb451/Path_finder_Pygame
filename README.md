@@ -17,4 +17,4 @@ path--purple\
 4)Right-click to unset or clear cell\
 5)hit a after setting the starting and ending cell and barrier if any to visualize the path using A\* search algorithm\
 6)hit b after setting the starting and ending cell and barrier if any to visualize the path using BFS search algorithm\
-7)hit c to clear grid\
+7)hit r to reset or clear grid\
